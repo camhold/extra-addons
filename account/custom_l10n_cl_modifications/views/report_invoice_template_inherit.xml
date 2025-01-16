@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Herencia del template custom_header para modificar el borde -->
+    <template id="custom_header_inherit" inherit_id="l10n_cl.custom_header">
+
+        <!-- Modificar el borde alrededor del bloque de RUT a border-danger con !important para forzar el estilo -->
+        <xpath expr="//div[@name='right-upper-side']//div[contains(@class, 'border-dark')]" position="attributes">
+            <attribute name="class" remove="border-dark"/>
+            <attribute name="class" add="border-danger"/>
+            <!-- Forzar el color del borde a rojo -->
+            <attribute name="style" add="border-color: red !important;"/>
+        </xpath>
+
+                <!-- Modificar el color del h6 a rojo apuntando de forma específica -->
+        <xpath expr="//div[@name='right-upper-side']//h6[contains(@style, 'color: black')]" position="attributes">
+            <attribute name="style" replace="color: red !important;"/>
+        </xpath>
+
+    </template>
+
+    
+
+</odoo>

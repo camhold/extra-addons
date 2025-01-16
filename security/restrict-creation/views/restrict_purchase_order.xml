@@ -1,0 +1,48 @@
+<odoo>
+    <record id="view_purchase_order_form_restrict_creation" model="ir.ui.view">
+        <field name="name">purchase.order.form.restrict.creation</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Restricción para el campo partner_id -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo currency_id -->
+            <xpath expr="//field[@name='currency_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo picking_type_id -->
+            <xpath expr="//field[@name='picking_type_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo dest_address_id -->
+            <xpath expr="//field[@name='dest_address_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para los campos en las líneas de pedido -->
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo user_id -->
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo incoterm_id -->
+            <xpath expr="//field[@name='incoterm_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo payment_term_id -->
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restricción para el campo fiscal_position_id -->
+            <xpath expr="//field[@name='fiscal_position_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

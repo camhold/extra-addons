@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Restrict Product Creation in Sales Orders -->
+    <record id="view_sale_order_form_restrict_creation" model="ir.ui.view">
+        <field name="name">sale.order.form.restrict.creation</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Restrict product creation in sales order line tree view -->
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_template_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+
+            <!-- Restrict UoM creation in sales order line form view -->
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+
+              <!-- Restrict cliente creation in sales order line tree view -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+
+              <!-- Restrict direccion factura creation in sales order line tree view -->
+            <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+
+              <!-- Restrict direccion entrega creation in sales order line tree view -->
+            <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

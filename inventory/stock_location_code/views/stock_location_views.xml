@@ -1,0 +1,89 @@
+<odoo>
+    <!-- Vista Formulario -->
+    <record id="view_location_form_inherit" model="ir.ui.view">
+        <field name="name">stock.location.form.inherit</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <!-- Salto de línea para etiqueta -->
+                <div class="o_form_label_row">
+                    <label for="code"/>
+                </div>
+                <!-- Salto de línea para el campo -->
+                <div class="o_form_field_row">
+                    <field name="code" string="Código Netbox"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+    <!-- Vista Árbol -->
+    <record id="view_location_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.location.tree.inherit</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='complete_name']" position="after">
+                <!-- Nueva columna para el campo -->
+                <field name="code" string="Código Netbox"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="stock_move_line_custom_search_view" model="ir.ui.view">
+        <field name="name">stock.move.line.custom.search</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.stock_move_line_view_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='groupby_product_id']" position="after">
+                <filter string="Contiene codigo netbox" name="is_netbox" domain="[('code', '!=', False)]"/>
+                <filter string="NO Contiene codigo netbox" name="is_not_netbox" domain="[('code', '=', False)]"/>
+            </xpath>
+            <xpath expr="//field[@name='location_id']" position="before">
+                <field name="code" string="Netbox" filter_domain="[('code', 'ilike', self)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_move_line_tree" model="ir.ui.view">
+        <field name="name">stock.move.line.report.tree</field>
+        <field name="model">stock.move.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date_done"/>
+                <field name="name_trans"/>
+                <field name="location_origin_id"/>
+                <field name="location_dest_id"/>
+                <field name="code"/>
+                <field name="default_code"/>
+                <field name="name_product"/>
+                <field name="standard_price"/>
+                <field name="quantity"/>
+                <field name="total"/>
+                <field name="lot_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="report_stock_quant_action" model="ir.actions.act_window">
+        <field name="name">Movimientos de productos</field>
+        <field name="res_model">stock.move.line</field>
+        <field name="domain">[('usage', '=', 'production')]</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_stock_move_line_tree"/>
+        <field name="context">{
+            'search_default_by_location': True,
+        }
+        </field>
+    </record>
+
+    <menuitem
+            id="menu_report_stock_quant"
+            action="report_stock_quant_action"
+            parent="stock.menu_stock_inventory_control"
+            sequence="100"
+            name="Movimientos de productos"
+    />
+</odoo>

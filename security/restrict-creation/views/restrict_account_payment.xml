@@ -1,0 +1,33 @@
+<odoo>
+    <record id="view_register_payment_form_restrict_creation" model="ir.ui.view">
+        <field name="name">register.payment.form.restrict.creation</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <!-- Restrict creation in partner_id field -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restrict creation in currency_id field -->
+            <xpath expr="//field[@name='currency_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restrict creation in journal_id field -->
+            <xpath expr="//field[@name='journal_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restrict creation in payment_method_line_id field -->
+            <xpath expr="//field[@name='payment_method_line_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restrict creation in partner_bank_id field -->
+            <xpath expr="//field[@name='partner_bank_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <!-- Restrict creation in destination_journal_id field -->
+            <xpath expr="//field[@name='destination_journal_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

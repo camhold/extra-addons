@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_edi_form_inherit_internal" model="ir.ui.view">
+        <field name="name">stock.picking.edi.form.inherit.internal</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Modificación de la visibilidad del botón -->
+            <xpath expr="//button[@name='create_delivery_guide']" position="attributes">
+                <attribute name="invisible">state != 'done' or l10n_cl_dte_status in ['accepted', 'objected', 'ask_for_status', 'rejected', 'cancelled'] or (picking_type_code != 'outgoing' and picking_type_code != 'internal') or l10n_cl_draft_status or country_code != 'CL'</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

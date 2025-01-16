@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+    
+        <record id="view_currency_form_inherit_series" model="ir.ui.view">
+            <field name="name">currency.form.inherit.series</field>
+            <field name="model">res.currency</field>
+            <field name="inherit_id" ref="base.view_currency_form"/>
+            <field name="arch" type="xml">
+                <field name="position" position="after">
+                    <field name="series"/>
+                </field>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

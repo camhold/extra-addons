@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_mp_gestion_account_move_tree" model="ir.ui.view">
+        <field name="name">account.move.line.tree</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <tree string="Gestión" create="false">
+                <field name="id" optional="hide"/>
+                <field name="date" string="Fecha contable"/>
+                <field name="vat" string="RUT"/>
+                <field name="partner_id" string="Proveedor" optional="show"/>
+                <field name="invoice_date" string="Fecha de factura" optional="hide"/>
+                <field name="move_name" string="Número de asiento" optional="hide"/>
+                <field name="code_account" string="Número de Cuenta Contable" optional="show"/>
+                <field name="account_id" string="Cuenta" optional="show"/>
+                <field name="account_internal_group" string="Grupo de Cuenta Interno" optional="show"/>
+                <field name="journal_id" string="Diario" optional="show"/>
+                <field name="mp_grupo_flujo_id" string="Grupo de Flujo" optional="show"/>
+                <field name="mp_flujo_id" string="Flujo" optional="show"/>
+                <field name="analytic_account_ids" string="Cuentas Analíticas" optional="show" widget="many2many_tags"/>
+                <field name="product_id" string="Producto" optional="show"/>
+                <field name="l10n_latam_document_type_id" string="Tipo de Documento" optional="show"/>
+                <field name="currency_id" string="Moneda" optional="show"/>
+                <field name="debit" string="Débito" optional="show"/>
+                <field name="credit" string="Crédito" optional="show"/>
+                <field name="balance" string="Balance" optional="show"/>
+                <field name="amount_currency" string="Importe en divisa" optional="show"/>
+                <field name="move_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para Mostrar la Vista Tree de Account Move Line -->
+    <record id="action_mp_gestion_account_move_line_tree" model="ir.actions.act_window">
+        <field name="name">Gestión de Movimientos</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_mp_gestion_account_move_tree"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_create">
+                No hay movimientos contables.
+            </p>
+        </field>
+    </record>
+    
+        <!-- Menú Principal de MP Gestión, ahora dentro de account.finance -->
+    <menuitem id="mp_gestion_menu" 
+              name="MP Gestion" 
+              sequence="5"
+              web_icon="mp_gestion,static/description/odoo_icon.png"
+              groups="mp_gestion.mp_gestion_group"
+/>
+
+        <!-- Enlazar la Acción al Menú de MP Gestión -->
+    <menuitem id="menu_mp_gestion_account_move_line_tree" 
+              name="Movimientos de Gestión" 
+              parent="mp_gestion_menu" 
+              action="action_mp_gestion_account_move_line_tree"
+              sequence="2"/>
+</odoo>

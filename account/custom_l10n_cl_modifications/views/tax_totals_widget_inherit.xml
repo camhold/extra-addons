@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Herencia del template para reemplazar "VAT" por "IVA" y "Total" por "Monto Total" -->
+    <template id="tax_totals_widget_inherit" inherit_id="l10n_cl.tax_totals_widget">
+        <!-- Reemplazar el texto "VAT" por "IVA" -->
+        <xpath expr="//td[contains(text(), 'VAT')]" position="replace">
+            <td t-out="'IVA %s' % subtotal_amounts['vat_percent']"/>
+        </xpath>
+
+        <!-- Reemplazar el texto "Total" por "Monto Total" -->
+        <xpath expr="//td/strong[contains(text(), 'Total')]" position="replace">
+            <strong>Monto Total</strong>
+        </xpath>
+    </template>
+</odoo>
