@@ -14,6 +14,7 @@ class StockPicking(models.Model):
     # Campo Many2many para mostrar números de serie/lote como tags
     lotes_tags = fields.Many2many('stock.lot', string="Lotes (Tags)", compute='_compute_lotes_tags')
     total_costo_unitario = fields.Float(compute='_compute_total_costo_unitario', string="Total Costo Unitario")
+    analytic_account_ids = fields.Many2many('account.analytic.account', string="Cuentas Analíticas")
 
     @api.depends('move_ids_without_package.date')
     def _compute_fecha_movimiento(self):
@@ -53,3 +54,34 @@ class StockPicking(models.Model):
         for record in self:
             lotes = record.move_line_ids.mapped('lot_id')
             record.lotes_tags = lotes
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    fecha_movimiento = fields.Datetime(compute='_compute_fecha_movimiento', string="Fecha Movimiento")
+    origen_movimiento = fields.Char(related='move_id.origin', string="Origen del Movimiento")
+    producto = fields.Many2one('product.product', related='product_id', string="Producto")
+    ubicacion_origen = fields.Many2one('stock.location', related='location_id', string="Ubicación de Origen")
+    ubicacion_destino = fields.Many2one('stock.location', related='location_dest_id', string="Ubicación de Destino")
+    cantidad = fields.Float(compute='_compute_cantidad', string="Cantidad")
+    costo_unitario = fields.Float(compute='_compute_costo_unitario', string="Costo Unitario")
+    lote_tags = fields.Many2many('stock.lot', string="Lotes (Tags)", compute='_compute_lote_tags')
+
+    @api.depends('move_id.date')
+    def _compute_fecha_movimiento(self):
+        for record in self:
+            record.fecha_movimiento = record.move_id.date
+
+    @api.depends('quantity')
+    def _compute_cantidad(self):
+        for record in self:
+            record.cantidad = record.quantity
+
+    @api.depends('product_id.standard_price')
+    def _compute_costo_unitario(self):
+        for record in self:
+            record.costo_unitario = record.product_id.standard_price
+
+    @api.depends('lot_id')
+    def _compute_lote_tags(self):
+        for record in self:
+            record.lote_tags = record.lot_id

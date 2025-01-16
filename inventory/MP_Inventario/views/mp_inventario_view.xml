@@ -33,7 +33,25 @@
             </xpath>
         </field>
     </record>
-
+    <!-- Vista de árbol personalizada para stock.move.line -->
+    <record id="view_mp_inventario_move_line_tree" model="ir.ui.view">
+        <field name="name">stock.move.line.mp.inventario.tree</field>
+        <field name="model">stock.move.line</field>
+        <field name="priority" eval="50"/>
+        <field name="arch" type="xml">
+            <tree create="0">
+                <field name="fecha_movimiento" optional="show"/>
+                <field name="origen_movimiento" optional="show"/>
+                <field name="producto" optional="show"/>
+                <field name="lote_tags" widget="many2many_tags" string="Lotes" optional="show"/>
+                <field name="ubicacion_origen" optional="show"/>
+                <field name="ubicacion_destino" optional="show"/>
+                <field name="cantidad" string="Cantidad" optional="show"/>
+                <field name="costo_unitario" string="Costo Unitario" optional="show"/>
+                <field name="state" optional="show" widget="badge" decoration-danger="state=='cancel'" decoration-info="state=='assigned'" decoration-muted="state == 'draft'" decoration-success="state == 'done'" decoration-warning="state not in ('draft','cancel','done','assigned')"/>
+            </tree>
+        </field>
+    </record>
 
     <!-- Acción personalizada usando view_ids para no afectar la original -->
     <record id="action_mp_inventario" model="ir.actions.act_window">
@@ -43,6 +61,19 @@
         <field name="view_ids" eval="[(5,0,0),
             (0,0,{'view_mode': 'tree','view_id': ref('view_mp_inventario_tree')}),
             (0,0,{'view_mode': 'form','view_id': ref('stock.view_picking_form')})
+        ]"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="groups_id" eval="[(4, ref('MP_Inventario.group_mp_inventario_user'))]"/>
+    </record>
+    <!-- Acción personalizada para stock.move.line -->
+    <record id="action_mp_inventario_move_line" model="ir.actions.act_window">
+        <field name="name">Líneas de Movimiento</field>
+        <field name="res_model">stock.move.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5,0,0),
+            (0,0,{'view_mode': 'tree','view_id': ref('view_mp_inventario_move_line_tree')}),
+            (0,0,{'view_mode': 'form','view_id': ref('stock.view_move_line_form')})
         ]"/>
         <field name="domain">[]</field>
         <field name="context">{}</field>
@@ -59,5 +90,11 @@
               name="Movimientos"
               parent="menu_mp_inventario_root"
               action="action_mp_inventario"
+              groups="MP_Inventario.group_mp_inventario_user"/>
+        <!-- Menú para las líneas de movimiento -->
+    <menuitem id="menu_mp_inventario_move_line"
+              name="Líneas de Movimiento"
+              parent="menu_mp_inventario_root"
+              action="action_mp_inventario_move_line"
               groups="MP_Inventario.group_mp_inventario_user"/>
 </odoo>
