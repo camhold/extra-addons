@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_stock_request_order_form_inherit" model="ir.ui.view">
+        <field name="name">stock.request.order.form.inherit</field>
+        <field name="model">stock.request.order</field>
+        <field name="inherit_id" ref="stock_request.stock_request_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Heredar el grupo específico -->
+            <xpath expr="//field[@name='picking_policy']" position="after">
+                <!-- Agregar aquí los campos analíticos -->
+                <field name="analytic_account_ids" string="Analytic Accounts"
+                widget="many2many_tags"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!--record id="view_stock_request_order_line_form_inherit" model="ir.ui.view">
+        <field name="name">stock.request.order.line.form.inherit</field>
+        <field name="model">stock.request.order.line</field>
+        <field name="inherit_id" ref="stock_request.stock_request_order_line_form"/>
+        <field name="arch" type="xml">
+            <group position="after">
+                <field name="analytic_account_ids"/>
+            <
+                /group>
+        </field>
+    </!record-->
+</odoo>
