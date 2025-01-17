@@ -42,8 +42,10 @@
             <tree create="0">
                 <field name="fecha_movimiento" optional="show"/>
                 <field name="origen_movimiento" optional="show"/>
+                <field name="reference" string="Referencia" optional="show"/>
                 <field name="producto" optional="show"/>
                 <field name="lote_tags" widget="many2many_tags" string="Lotes" optional="show"/>
+                <field name="analytic_account_ids" widget="many2many_tags" string="Cuentas Analíticas" optional="show"/>
                 <field name="ubicacion_origen" optional="show"/>
                 <field name="ubicacion_destino" optional="show"/>
                 <field name="cantidad" string="Cantidad" optional="show"/>

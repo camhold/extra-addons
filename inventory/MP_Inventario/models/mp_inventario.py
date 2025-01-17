@@ -65,6 +65,7 @@ class StockMoveLine(models.Model):
     cantidad = fields.Float(compute='_compute_cantidad', string="Cantidad")
     costo_unitario = fields.Float(compute='_compute_costo_unitario', string="Costo Unitario")
     lote_tags = fields.Many2many('stock.lot', string="Lotes (Tags)", compute='_compute_lote_tags')
+    analytic_account_ids = fields.Many2many('account.analytic.account', string="Cuentas Analíticas")
 
     @api.depends('move_id.date')
     def _compute_fecha_movimiento(self):
