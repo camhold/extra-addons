@@ -13,7 +13,7 @@ class StockPicking(models.Model):
     demanda = fields.Float(compute='_compute_demanda', string="Demanda")
     # Campo Many2many para mostrar números de serie/lote como tags
     lotes_tags = fields.Many2many('stock.lot', string="Lotes (Tags)", compute='_compute_lotes_tags')
-    total_costo_unitario = fields.Float(compute='_compute_total_costo_unitario', string="Total Costo Unitario")
+    #total_costo_unitario = fields.Float(compute='_compute_total_costo_unitario', string="Total Costo Unitario")
     analytic_account_ids = fields.Many2many('account.analytic.account', string="Cuentas Analíticas")
 
     @api.depends('move_ids_without_package.date')
@@ -21,7 +21,7 @@ class StockPicking(models.Model):
         for record in self:
             fechas = record.move_ids_without_package.mapped('date')
             record.fecha_movimiento = fechas[0] if fechas else False
-
+        
     @api.depends('move_line_ids.quantity')
     def _compute_cantidad(self):
         for record in self:
@@ -33,7 +33,7 @@ class StockPicking(models.Model):
         for record in self:
             cantidades_demandadas = record.move_ids_without_package.mapped('product_uom_qty')
             record.demanda = sum(cantidades_demandadas)
-
+        ''' 
     @api.depends('move_line_ids.product_id', 'move_line_ids.quantity')
     def _compute_total_costo_unitario(self):
         for record in self:
@@ -42,7 +42,7 @@ class StockPicking(models.Model):
             for line in record.move_line_ids:
                 total += line.product_id.standard_price * line.quantity
             record.total_costo_unitario = total
-
+        '''
     @api.depends('move_ids_without_package.product_id')
     def _compute_productos_tags(self):
         for record in self:
@@ -63,8 +63,10 @@ class StockMoveLine(models.Model):
     ubicacion_origen = fields.Many2one('stock.location', related='location_id', string="Ubicación de Origen")
     ubicacion_destino = fields.Many2one('stock.location', related='location_dest_id', string="Ubicación de Destino")
     cantidad = fields.Float(compute='_compute_cantidad', string="Cantidad")
-    costo_unitario = fields.Float(compute='_compute_costo_unitario', string="Costo Unitario")
+    tipo_operacion = fields.Selection(related='picking_type_id.code', string="Tipo de Operación")
+    #costo_unitario = fields.Float(compute='_compute_costo_unitario', string="Costo Unitario")
     lote_tags = fields.Many2many('stock.lot', string="Lotes (Tags)", compute='_compute_lote_tags')
+    demanda = fields.Float(compute='_compute_demanda', string="Demanda")
     analytic_account_ids = fields.Many2many('account.analytic.account', string="Cuentas Analíticas")
 
     @api.depends('move_id.date')
@@ -76,13 +78,19 @@ class StockMoveLine(models.Model):
     def _compute_cantidad(self):
         for record in self:
             record.cantidad = record.quantity
-
+    '''
     @api.depends('product_id.standard_price')
     def _compute_costo_unitario(self):
         for record in self:
             record.costo_unitario = record.product_id.standard_price
-
+    '''
     @api.depends('lot_id')
     def _compute_lote_tags(self):
         for record in self:
             record.lote_tags = record.lot_id
+            
+    @api.depends('quantity_product_uom')
+    def _compute_demanda(self):
+        for record in self:
+            cantidades_demandadas = record.mapped('quantity_product_uom')
+            record.demanda = sum(cantidades_demandadas)

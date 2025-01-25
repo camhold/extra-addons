@@ -15,9 +15,9 @@
                 <field name="ubicacion_origen" optional="show"/>
                 <field name="ubicacion_destino" optional="show"/>
                 <field name="tipo_operacion" optional="show"/>
-                <field name="demanda" string="Demanda" optional="show"/>
-                <field name="cantidad" string="Cantidad" optional="show"/>
-                <field name="total_costo_unitario" string="Total Costo Unitario" optional="show"/>
+                <!--<field name="demanda" string="Demanda" optional="show"/>-->
+                <!--<field name="cantidad" string="Cantidad" optional="show"/>-->
+                <!--<field name="total_costo_unitario" string="Total Costo Unitario" optional="show"/>-->
                 <field name="state" optional="show" widget="badge" decoration-danger="state=='cancel'" decoration-info="state== 'assigned'" decoration-muted="state == 'draft'" decoration-success="state == 'done'" decoration-warning="state not in ('draft','cancel','done','assigned')"/>
             </tree>
         </field>
@@ -48,8 +48,11 @@
                 <field name="analytic_account_ids" widget="many2many_tags" string="Cuentas Analíticas" optional="show"/>
                 <field name="ubicacion_origen" optional="show"/>
                 <field name="ubicacion_destino" optional="show"/>
+                <field name="tipo_operacion" optional="show"/>
+                <field name="demanda" string="Demanda" optional="show"/>
                 <field name="cantidad" string="Cantidad" optional="show"/>
-                <field name="costo_unitario" string="Costo Unitario" optional="show"/>
+
+               <!-- <field name="costo_unitario" string="Costo Unitario" optional="show"/>-->
                 <field name="state" optional="show" widget="badge" decoration-danger="state=='cancel'" decoration-info="state=='assigned'" decoration-muted="state == 'draft'" decoration-success="state == 'done'" decoration-warning="state not in ('draft','cancel','done','assigned')"/>
             </tree>
         </field>
