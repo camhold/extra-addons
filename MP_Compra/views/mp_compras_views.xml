@@ -33,6 +33,12 @@
                 <field name="last_purchase_partner_id" string="Proveedor" />
                 <field name="last_purchase_cost" string="Costo Compra"/>
                 <field name="current_debt" string="Deuda Actual" />
+                <!-- Botón en cada línea -->
+                <button name="action_view_po"
+                        string="Purchased"
+                        type="object"
+                        icon="fa-credit-card"/>
+                <field name="purchase_line_count" widget="statinfo" nolabel="1"/>
                 <field name="active" column_invisible="True"/>
                 <field name="activity_exception_decoration" widget="activity_exception"/>
             </tree>
@@ -47,7 +53,11 @@
         <field name="view_id" ref="view_mp_compras_product_template_tree"/>
     </record>
 
-    <menuitem id="menu_mp_compras_root" name="MP Compras" sequence="10" />
+    <menuitem id="menu_mp_compras_root"
+              name="MP Compras"
+              sequence="10"
+              web_icon="MP_Inventario,static/description/icon.png"/>
+
     <menuitem id="menu_mp_compras_products"
               name="Productos"
               parent="menu_mp_compras_root"

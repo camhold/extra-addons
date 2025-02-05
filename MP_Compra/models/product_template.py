@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -19,6 +20,11 @@ class ProductTemplate(models.Model):
     current_debt = fields.Float(
         string="Deuda Actual",
         compute='_compute_last_purchase_info',
+    )
+    purchase_line_count = fields.Integer(
+        string="Líneas de Compra",
+        compute="_compute_purchase_line_count",
+        store=True
     )
 
     @api.depends()
@@ -76,3 +82,42 @@ class ProductTemplate(models.Model):
             total_deuda = sum(moves.mapped('amount_residual'))
 
             template.current_debt = total_deuda
+
+    def action_view_sales(self):
+        # Verifica la condición antes de continuar
+        if not self.sale_ok:
+            raise UserError(_("La acción no puede ejecutarse porque sale_ok es False."))
+        # Lógica original de la acción...
+        return True
+
+    @api.depends('purchase_ok')
+    def _compute_purchase_line_count(self):
+        PurchaseLine = self.env['purchase.order.line']
+        # Se cuenta sólo las líneas de compra de órdenes en estado 'purchase' o 'done'
+        data = PurchaseLine.read_group(
+            [
+                ('product_id.product_tmpl_id', 'in', self.ids),
+                ('order_id.state', 'in', ['purchase', 'done'])
+            ],
+            ['product_id'],
+            ['product_id']
+        )
+        # Creamos un diccionario que asocie el id del producto con la cantidad contada
+        mapped_data = {d['product_id'][0]: d['product_id_count'] for d in data}
+        for product in self:
+            product.purchase_line_count = mapped_data.get(product.id, 0)
+
+    def action_view_purchase_lines(self):
+        self.ensure_one()
+        if not self.purchase_ok:
+            raise UserError(_("El producto no está configurado para compras."))
+
+        # Obtenemos la acción que muestra el historial de compra.
+        try:
+            action = self.env.ref('purchase.purchase_history_tree').read()[0]
+        except ValueError:
+            raise UserError(_("No se encontró la acción de historial de compras. Verifica que el módulo Purchase esté instalado y que el external id sea correcto."))
+
+        # líneas de compra se relaciona el producto con 'product_id'
+        action['domain'] = [('order_line.product_id', '=', self.id)]
+        return action
