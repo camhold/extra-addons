@@ -1,0 +1,8 @@
+<odoo>
+    <record id="group_mp_compras_user" model="res.groups">
+        <field name="name">Usuarios MP Compras</field>
+        <!-- Cambiamos la referencia por una que sí exista en Odoo 17 -->
+        <field name="category_id" ref="base.module_category_purchase"/>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+    </record>
+</odoo>

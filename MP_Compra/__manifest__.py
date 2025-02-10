@@ -5,6 +5,8 @@
     'author': 'Adrian Hernandez',
     'depends': ['base', 'stock', 'product','account','purchase'],
     'data': [
+        'security/mp_compras_security.xml',
+        'security/ir.model.access.csv',
         'views/mp_compras_views.xml',
     ],
     'application': True,

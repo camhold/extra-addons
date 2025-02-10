@@ -3,7 +3,9 @@
         <field name="name">mp_compras.product.template.tree</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <tree string="Product" multi_edit="1" sample="1">
+            <!-- Se añaden los atributos create, edit, delete y duplicate en false -->
+            <tree string="Product" multi_edit="1" sample="1"
+                  create="false" edit="false" delete="false" duplicate="false">
                 <header>
                     <button string="Print Labels" type="object" name="action_open_label_layout"/>
                 </header>
@@ -12,55 +14,87 @@
                 <field name="currency_id" column_invisible="True"/>
                 <field name="cost_currency_id" column_invisible="True"/>
                 <field name="priority" widget="priority" optional="show" nolabel="1"/>
-                <field name="name" string="Product Name"/>
                 <field name="default_code" optional="show"/>
-                <field name="product_tag_ids" widget="many2many_tags" optional="show"/>
-                <field name="barcode" optional="hide" readonly="product_variant_count != 1"/>
-                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" optional="hide"/>
-                <field name="list_price" string="Sales Price"
-                       widget="monetary" options="{'currency_field': 'currency_id'}"
-                       optional="show" decoration-muted="not sale_ok"/>
+                <field name="name" string="Product Name"/>
+                <field name="detailed_type" optional="hide" readonly="1"/>
+                <field name="categ_id" optional="hide"/>
+                <field name="uom_id" string="Unit"
+                       readonly="1" optional="show" groups="uom.group_uom"/>
                 <field name="standard_price"
                        widget="monetary" options="{'currency_field': 'cost_currency_id'}"
                        optional="show" readonly="1"/>
-                <field name="categ_id" optional="hide"/>
-                <field name="detailed_type" optional="hide" readonly="1"/>
-                <field name="type" column_invisible="True"/>
-                <field name="uom_id" string="Unit"
-                       readonly="1" optional="show" groups="uom.group_uom"/>
-                <field name="qty_available" string="Disponible" optional="show"/>
-                <field name="last_purchase_date" string="Última Compra"/>
+                <field name="list_price" string="Sales Price"
+                       widget="monetary" options="{'currency_field': 'currency_id'}"
+                       optional="show" decoration-muted="not sale_ok"/>
                 <field name="last_purchase_partner_id" string="Proveedor" />
-                <field name="last_purchase_cost" string="Costo Compra"/>
-                <field name="current_debt" string="Deuda Actual" />
-                <!-- Botón en cada línea -->
+                <field name="last_purchase_date" string="Última Compra"/>
+                <field name="last_purchase_cost" string="Costo Compra" 
+                       widget="monetary" options="{'currency_field': 'currency_id'}"
+                       optional="show" decoration-muted="not sale_ok"/>
+                <field name="current_debt" string="Deuda Actual"  
+                       widget="monetary" options="{'currency_field': 'currency_id'}"
+                       optional="show" decoration-muted="not sale_ok"/>
+                <field name="product_tag_ids" widget="many2many_tags" optional="show"/>
+                <field name="barcode" optional="hide" readonly="product_variant_count != 1"/>
+                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" optional="hide"/>
+                <field name="type" column_invisible="True"/>
+                <field name="qty_available" string="Disponible" optional="show"/>
                 <button name="action_view_po"
                         string="Purchased"
                         type="object"
                         icon="fa-credit-card"/>
-                <field name="purchase_line_count" widget="statinfo" nolabel="1"/>
+                <field name="purchase_line_count" string=" Líneas de Compra" optional="show"/>
                 <field name="active" column_invisible="True"/>
                 <field name="activity_exception_decoration" widget="activity_exception"/>
             </tree>
         </field>
     </record>
 
-    <!-- Action para abrir nueva vista MP Compras -->
+    <record id="view_purchase_history_tree_inherit_no_create" model="ir.ui.view">
+        <field name="name">purchase.history.tree.inherit.no.create</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_history_tree"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="create">false</attribute>
+                <attribute name="edit">false</attribute>
+                <attribute name="delete">false</attribute>
+                <attribute name="duplicate">false</attribute>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_form_inherit_no_edit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.no.edit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="edit">false</attribute>
+                <attribute name="delete">false</attribute>
+                <attribute name="duplicate">false</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record id="action_mp_compras_product_template_tree" model="ir.actions.act_window">
         <field name="name">Productos (MP Compras)</field>
         <field name="res_model">product.template</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_mp_compras_product_template_tree"/>
+        <field name="groups_id" eval="[(4, ref('MP_Compra.group_mp_compras_user'))]"/>
     </record>
 
     <menuitem id="menu_mp_compras_root"
               name="MP Compras"
               sequence="10"
-              web_icon="MP_Inventario,static/description/icon.png"/>
+              web_icon="MP_Inventario,static/description/icon.png"
+              groups="MP_Compra.group_mp_compras_user"/>
 
     <menuitem id="menu_mp_compras_products"
               name="Productos"
               parent="menu_mp_compras_root"
               action="action_mp_compras_product_template_tree"
-              sequence="20"/>
+              sequence="20"
+              groups="MP_Compra.group_mp_compras_user"/>
 </odoo>
