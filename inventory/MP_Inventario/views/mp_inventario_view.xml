@@ -5,7 +5,8 @@
         <field name="model">stock.picking</field>
         <field name="priority" eval="50"/>
         <field name="arch" type="xml">
-            <tree create="0">
+            <tree string="Product" multi_edit="1" sample="1"
+                  create="false" edit="false" delete="false" duplicate="false">
                 <field name="fecha_movimiento" optional="show"/>
                 <field name="origen_movimiento" optional="show"/>
                 <field name="name" optional="show"/>
@@ -55,6 +56,18 @@
                <!-- <field name="costo_unitario" string="Costo Unitario" optional="show"/>-->
                 <field name="state" optional="show" widget="badge" decoration-danger="state=='cancel'" decoration-info="state=='assigned'" decoration-muted="state == 'draft'" decoration-success="state == 'done'" decoration-warning="state not in ('draft','cancel','done','assigned')"/>
             </tree>
+        </field>
+    </record>
+    
+    <record id="view_stock_picking_form_inherit_no_edit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.no.edit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="edit">false</attribute>
+                <attribute name="delete">false</attribute>
+            </xpath>
         </field>
     </record>
 
